@@ -21,6 +21,9 @@ KIND_CLUSTER_NAME = aso-kind
 # Go compiler builds tags: some parts of the test suite use these to selectively compile tests.
 BUILD_TAGS ?= all
 
+# Operator-sdk release version
+RELEASE_VERSION ?= $(shell git describe --exact-match --tags HEAD || echo 0.1-`git rev-parse --short HEAD`)
+
 ifdef TMPDIR
 TMPDIR := $(realpath ${TMPDIR})
 else
@@ -192,7 +195,7 @@ helm-chart-manifests: generate
 	# create unique names so each instance of the operator has its own role binding 
 	find ./charts/azure-service-operator/templates/generated/ -name *clusterrole* -exec perl -pi -e 's/$$/-{{ .Release.Namespace }}/ if /name: azure/' {} \;
 	# package the necessary files into a tar file
-	helm package ./charts/azure-service-operator -d ./charts
+	helm package ./charts/azure-service-operator -d ./charts --version $(RELEASE_VERSION)
 	# update Chart.yaml for Helm Repository
 	helm repo index ./charts
 
@@ -341,9 +344,6 @@ install-test-dependencies:
 	&& go get github.com/axw/gocov/gocov \
 	&& go get github.com/AlekSi/gocov-xml \
 	&& go get github.com/wadey/gocovmerge
-
-# Operator-sdk release version
-RELEASE_VERSION ?= v1.0.1
 
 .PHONY: install-operator-sdk
 install-operator-sdk:
