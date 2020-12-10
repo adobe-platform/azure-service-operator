@@ -31,8 +31,17 @@ func (vr *MySQLVNetRuleClient) Ensure(ctx context.Context, obj runtime.Object, o
 	virtualnetworkname := instance.Spec.VNetName
 	subnetName := instance.Spec.SubnetName
 	ignoreendpoint := instance.Spec.IgnoreMissingServiceEndpoint
+	subscription := instance.Spec.Subscription
 
-	vnetrule, err := vr.GetSQLVNetRule(ctx, groupName, server, ruleName)
+	c := &MySQLVNetRuleClient{}
+	if subscription == "" || subscription == vr.creds.SubscriptionID() {
+		c = vr
+	} else {
+		creds := vr.creds.NewSubscriptionCopy(subscription)
+		c = NewMySQLVNetRuleClient(creds)
+	}
+
+	vnetrule, err := c.GetSQLVNetRule(ctx, groupName, server, ruleName)
 	if err == nil {
 		if vnetrule.VirtualNetworkRuleProperties != nil && vnetrule.VirtualNetworkRuleProperties.State == mysql.VirtualNetworkRuleStateReady {
 			instance.Status.Provisioning = false
@@ -55,7 +64,7 @@ func (vr *MySQLVNetRuleClient) Ensure(ctx context.Context, obj runtime.Object, o
 	}
 
 	instance.Status.Provisioning = true
-	_, err = vr.CreateOrUpdateSQLVNetRule(ctx, groupName, server, ruleName, virtualNetworkRG, virtualnetworkname, subnetName, ignoreendpoint)
+	_, err = c.CreateOrUpdateSQLVNetRule(ctx, groupName, server, ruleName, virtualNetworkRG, virtualnetworkname, subnetName, ignoreendpoint)
 	if err != nil {
 		instance.Status.Message = err.Error()
 		azerr := errhelp.NewAzureError(err)

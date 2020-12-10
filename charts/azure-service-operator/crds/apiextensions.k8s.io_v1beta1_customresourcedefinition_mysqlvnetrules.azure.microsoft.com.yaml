@@ -49,6 +49,8 @@ spec:
               type: string
             subnetName:
               type: string
+            subscription:
+              type: string
             vNetName:
               type: string
             vNetResourceGroup:

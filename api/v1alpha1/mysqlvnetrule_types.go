@@ -22,6 +22,7 @@ type MySQLVNetRuleSpec struct {
 	VNetResourceGroup            string `json:"vNetResourceGroup"`
 	VNetName                     string `json:"vNetName"`
 	SubnetName                   string `json:"subnetName"`
+	Subscription                 string `json:"subscription,omitempty"`
 	IgnoreMissingServiceEndpoint bool   `json:"ignoreMissingServiceEndpoint,omitempty"`
 }
 

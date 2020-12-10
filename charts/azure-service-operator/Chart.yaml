@@ -8,6 +8,6 @@ sources:
   - https://github.com/Azure/azure-service-operator
 dependencies:
   - name: aad-pod-identity
-    version: 1.5.5
+    version: 2.1.0
     repository: https://raw.githubusercontent.com/Azure/aad-pod-identity/master/charts
     condition: installAadPodIdentity
