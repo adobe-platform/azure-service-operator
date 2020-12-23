@@ -79,7 +79,7 @@ spec:
               fieldPath: metadata.namespace
         - name: REQUEUE_AFTER
           value: "30"
-        image: docker-dc-micro-release.dr.corp.adobe.com/k8s/azureserviceoperator:0.1.16800-dc2
+        image: {{ .Values.image.repository }}
         name: manager
         ports:
         - containerPort: 9443
