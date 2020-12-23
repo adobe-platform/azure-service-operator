@@ -55,6 +55,8 @@ spec:
               type: string
             vNetResourceGroup:
               type: string
+            vNetSubscriptionID:
+              type: string
           required:
           - resourceGroup
           - server
