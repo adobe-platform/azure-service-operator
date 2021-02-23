@@ -195,6 +195,7 @@ helm-chart-manifests: generate
 	rm charts/azure-service-operator/templates/generated/*_namespace_*
 	# replace hard coded ASO image with Helm templating
 	perl -pi -e s,controller:latest,"{{ .Values.image.repository }}",g ./charts/azure-service-operator/templates/generated/*_deployment_*
+	perl -pi -e s,gcr.io/kubebuilder/kube-rbac-proxy:.*,"{{ .Values.kubebuilder.image.repository }}",g ./charts/azure-service-operator/templates/generated/*_deployment_*
 	# replace hard coded namespace with Helm templating
 	find ./charts/azure-service-operator/templates/generated/ -type f -exec perl -pi -e s,azureoperator-system,"{{ .Release.Namespace }}",g {} \;
 	# create unique names so each instance of the operator has its own role binding 
