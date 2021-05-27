@@ -84,7 +84,7 @@ func ConnectToSQLDBAsCurrentUser(
 	user string,
 	clientID string) (*sql.DB, error) {
 
-	tokenProvider, err := iam.GetMSITokenProviderForResourceByClientID("https://ossrdbms-aad.database.windows.net", clientID)
+	tokenProvider, err := iam.GetMSITokenProviderForResourceByClientID("https://ossrdbms-aad.database.usgovcloudapi.net", clientID)
 	if err != nil {
 		return nil, err
 	}
